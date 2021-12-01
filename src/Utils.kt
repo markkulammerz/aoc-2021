@@ -2,6 +2,7 @@ import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.time.Duration
+import java.time.temporal.ChronoUnit
 import kotlin.system.measureNanoTime
 
 /**
@@ -15,7 +16,7 @@ fun readInput(name: String) = File("src", "$name.txt").readLines()
 fun String.md5(): String = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray())).toString(16)
 
 
-fun runFuncWithMeasurment(blocks: List<Pair<String, () -> Int>>) {
+fun runFuncWithMeasurement(blocks: List<Pair<String, () -> Int>>) {
     val times = mutableListOf<Pair<String, Long>>()
     for (block in blocks) {
         val label = block.first
@@ -27,7 +28,7 @@ fun runFuncWithMeasurment(blocks: List<Pair<String, () -> Int>>) {
         times.add(Pair(label, time))
     }
     println("------------------------------------")
-    times.forEach { println("${it.first}: ${Duration.ofNanos(it.second)}") }
+    times.forEach { println("${it.first}: ${Duration.of(it.second, ChronoUnit.NANOS)}") }
     val min = times.minByOrNull { it.second }
     println("------------------------------------")
     println("fastest was: ${min?.first} in ${min?.second?.let { Duration.ofNanos(it) }}")
