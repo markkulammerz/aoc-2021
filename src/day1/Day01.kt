@@ -1,12 +1,16 @@
 package day1
+import java.time.Duration
+import java.time.temporal.ChronoUnit
+import java.util.*
+import kotlin.system.measureNanoTime
 
 import readInput
 import runFuncWithMeasurment
 import java.util.concurrent.ThreadLocalRandom
 
 fun main() {
-    fun part1(depthData: List<Int>): Int {
-        var measurementIncreases: Int = 0
+    fun part1(depthData: IntArray): Int {
+        var measurementIncreases = 0
         for (index in depthData.indices) {
             if (index >= 1) {
                 val depthDifference = depthData[index] - depthData[index - 1]
@@ -18,12 +22,12 @@ fun main() {
         return measurementIncreases
     }
 
-    fun part2Normal(depthData: List<Int>): Int {
-        fun calculateMeasurementSlidingWindow(startIndex: Int, depthData: List<Int>): Int {
+    fun part2Normal(depthData: IntArray): Int {
+        fun calculateMeasurementSlidingWindow(startIndex: Int, depthData: IntArray): Int {
             return depthData[startIndex] + depthData[startIndex + 1] + depthData[startIndex + 2]
         }
 
-        var measurementIncreases: Int = 0
+        var measurementIncreases = 0
         for (index in depthData.indices) {
             if (index + 3 <= depthData.size - 1) {
                 val firstSlidingWindowValue: Int = calculateMeasurementSlidingWindow(index, depthData)
@@ -38,17 +42,17 @@ fun main() {
         return measurementIncreases
     }
 
-    fun part2Short(depthData: List<Int>): Int {
-        return depthData.asSequence().windowed(3).map { it.sum() }.windowed(2).count { it[1] > it[0] }
+    fun part2Short(depthData: IntArray): Int {
+        return depthData.asSequence().windowed(3) { it.sum() }.zipWithNext { i1, i2 -> i2 > i1 }.count { it }
     }
 
-    fun part2Speedy(depthData: List<Int>): Int {
-        var measurementIncreases: Int = 0
+    fun part2Speedy(depthData: IntArray): Int {
+        var measurementIncreases = 0
         for (index in depthData.indices) {
             if (index + 3 >= depthData.size) {
                 break
             }
-            if (depthData[index] < depthData[index + 3]) {
+            if (depthData[index + 3] > depthData[index]) {
                 measurementIncreases++
             }
         }
@@ -56,15 +60,16 @@ fun main() {
     }
 
     // test if implementation meets criteria from the description:
-    val testDepthData: List<Int> = readInput("day1/input-day1_test").map(String::toInt)
+    val testDepthData = readInput("day1/input-day1_test").map(String::toInt).toIntArray()
     check(part1(testDepthData) == 7)
     check(part2Normal(testDepthData) == 5)
+    println(part2Short(testDepthData))
     check(part2Short(testDepthData) == 5)
     check(part2Speedy(testDepthData) == 5)
 
     // print results for 'real' data input:
-    val realDepthData: List<Int> = readInput("day1/input-day1").map(String::toInt)
-    runFuncWithMeasurment(
+    val realDepthData = readInput("day1/input-day1").map(String::toInt).toIntArray()
+    runFuncWithMeasurement(
         listOf(
             Pair("step1_normal", { part1(realDepthData) }),
             Pair("step2_normal", { part2Normal(realDepthData) }),
@@ -76,13 +81,28 @@ fun main() {
     println("-----------------------------------------------")
     println("---------- generating random terrain ----------")
     var lastDepth = 173
-    val depths = mutableListOf<Int>()
-    for (index in 0..100_000_000) {
-        lastDepth += ThreadLocalRandom.current().nextInt(-15, 20)
-        depths.add(lastDepth)
+    val terrainSize = 2_100_000_000
+    val depths = IntArray(terrainSize + 1)
+    val sr = SplittableRandom(173)
+    val rt = Runtime.getRuntime()
+    val miB = 1024 * 1024
+
+    val randomTime = measureNanoTime {
+        for (index in 0..terrainSize) {
+            lastDepth += sr.nextInt(-15, 20)
+            depths[index] = (lastDepth)
+        }
     }
+    println("terrain creation time: ${Duration.of(randomTime, ChronoUnit.NANOS)}")
+
+    println("***** Heap utilization statistics [MiB] *****\n")
+    println("Total Memory: ${rt.totalMemory() / miB}")
+    println("Free Memory: ${rt.freeMemory() / miB}")
+    println("Used Memory: ${(rt.totalMemory() - rt.freeMemory()) / miB}")
+    println("Max Memory: ${rt.maxMemory() / miB}")
+
     println("-----------------------------------------------")
-    runFuncWithMeasurment(
+    runFuncWithMeasurement(
         listOf(
             Pair("step1_normal", { part1(depths) }),
             Pair("step2_normal", { part2Normal(depths) }),
