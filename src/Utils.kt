@@ -16,6 +16,8 @@ fun readInput(name: String) = File("src", "$name.txt").readLines()
 fun String.md5(): String = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray())).toString(16)
 
 
+fun Pair<Int, Int>.mulitply(): Int = first * second
+
 fun runFuncWithMeasurement(blocks: List<Pair<String, () -> Int>>) {
     val times = mutableListOf<Pair<String, Long>>()
     for (block in blocks) {
