@@ -28,7 +28,7 @@ fun main() {
 
     // print results for 'real' data input:
     val movements: List<String> = readInput("day2/input-day2")
-    runFuncWithMeasurment(
+    runFuncWithMeasurement(
         listOf(
             Pair("step1", { part1(movements) }),
             Pair("step2", { part2(movements) }),

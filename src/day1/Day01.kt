@@ -1,12 +1,11 @@
 package day1
+
+import readInput
+import runFuncWithMeasurement
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 import java.util.*
 import kotlin.system.measureNanoTime
-
-import readInput
-import runFuncWithMeasurment
-import java.util.concurrent.ThreadLocalRandom
 
 fun main() {
     fun part1(depthData: IntArray): Int {
