@@ -1,3 +1,8 @@
+package day2
+
+import readInput
+import runFuncWithMeasurement
+
 fun main() {
     fun part1(movements: List<String>): Int {
         var forwardPosition = 0;
@@ -15,6 +20,15 @@ fun main() {
         return forwardPosition * depthPosition;
     }
 
+    fun part1Short(mov: List<String>): Int {
+        val movements = mov.groupBy { it[0] }
+        val forward = movements['f']!!.sumOf { s -> s[8].toString().toInt() }
+        val up = movements['u']!!.sumOf { s -> s[3].toString().toInt() }
+        val down = movements['d']!!.sumOf { s -> s[5].toString().toInt() }
+
+        return forward * (down - up)
+    }
+
     fun part2(movements: List<String>): Int {
         return 0
     }
@@ -23,6 +37,7 @@ fun main() {
     // test if implementation meets criteria from the description:
     val testMovements: List<String> = readInput("day2/input-day2_test")
     check(part1(testMovements) == 150)
+    check(part1Short(testMovements) == 150)
     // check(part2(testMovements) == 900)
 
 
@@ -31,6 +46,7 @@ fun main() {
     runFuncWithMeasurement(
         listOf(
             Pair("step1", { part1(movements) }),
+            Pair("step1", { part1Short(movements) }),
             Pair("step2", { part2(movements) }),
         )
     )
