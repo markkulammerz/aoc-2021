@@ -1,3 +1,7 @@
+package day1
+
+import readInput
+import runFuncWithMeasurment
 import java.util.concurrent.ThreadLocalRandom
 
 fun main() {
@@ -52,14 +56,14 @@ fun main() {
     }
 
     // test if implementation meets criteria from the description:
-    val testDepthData: List<Int> = readInput("Day01_test").map(String::toInt)
+    val testDepthData: List<Int> = readInput("day1/input-day1_test").map(String::toInt)
     check(part1(testDepthData) == 7)
     check(part2Normal(testDepthData) == 5)
     check(part2Short(testDepthData) == 5)
     check(part2Speedy(testDepthData) == 5)
 
     // print results for 'real' data input:
-    val realDepthData: List<Int> = readInput("Day01").map(String::toInt)
+    val realDepthData: List<Int> = readInput("day1/input-day1").map(String::toInt)
     runFuncWithMeasurment(
         listOf(
             Pair("step1_normal", { part1(realDepthData) }),
