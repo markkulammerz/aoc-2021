@@ -1,7 +1,12 @@
+package day1
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 import java.util.*
 import kotlin.system.measureNanoTime
+
+import readInput
+import runFuncWithMeasurment
+import java.util.concurrent.ThreadLocalRandom
 
 fun main() {
     fun part1(depthData: IntArray): Int {
@@ -55,7 +60,7 @@ fun main() {
     }
 
     // test if implementation meets criteria from the description:
-    val testDepthData = readInput("Day01_test").map(String::toInt).toIntArray()
+    val testDepthData = readInput("day1/input-day1_test").map(String::toInt).toIntArray()
     check(part1(testDepthData) == 7)
     check(part2Normal(testDepthData) == 5)
     println(part2Short(testDepthData))
@@ -63,7 +68,7 @@ fun main() {
     check(part2Speedy(testDepthData) == 5)
 
     // print results for 'real' data input:
-    val realDepthData = readInput("Day01").map(String::toInt).toIntArray()
+    val realDepthData = readInput("day1/input-day1").map(String::toInt).toIntArray()
     runFuncWithMeasurement(
         listOf(
             Pair("step1_normal", { part1(realDepthData) }),
