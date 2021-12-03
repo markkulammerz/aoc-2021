@@ -105,8 +105,8 @@ fun main() {
         listOf(
             Pair("step1_normal", { part1(depths) }),
             Pair("step2_normal", { part2Normal(depths) }),
+            Pair("step2_speedy", { part2Speedy(depths) }),
             Pair("step2_short", { part2Short(depths) }),
-            Pair("step2_speedy", { part2Speedy(depths) })
         )
     )
 }
