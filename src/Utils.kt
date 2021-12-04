@@ -21,6 +21,10 @@ fun List<Int>.toDecimalValue(): Int {
     return Integer.parseInt(this.joinToString(""), 2)
 }
 
+fun Boolean.toNumberChar(): Char {
+    return if (this) '1' else '0'
+}
+
 fun runFuncWithMeasurement(blocks: List<Pair<String, () -> Int>>) {
     val times = mutableListOf<Pair<String, Long>>()
     for (block in blocks) {
