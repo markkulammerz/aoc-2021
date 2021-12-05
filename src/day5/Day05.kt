@@ -21,19 +21,24 @@ fun part1(pipelinePositionData: List<String>): Int {
         val (start, end) = convertStringToPairs(line)
         map.addNewPipeline(start, end)
     }
-
     return map.getDangerousAreasCount(2)
 }
 
 fun part2(pipelinePositionData: List<String>): Int {
-    return 0
+    val map = Map()
+
+    for (line in pipelinePositionData) {
+        val (start, end) = convertStringToPairs(line)
+        map.addNewPipeline(start, end, true)
+    }
+    return map.getDangerousAreasCount(2)
 }
 
 fun main() {
     // test if implementation meets criteria from the description:
     val pipelinePositionDataTest: List<String> = readInput("day5/input-day5_test")
     check(part1(pipelinePositionDataTest) == 5)
-    // check(part2(pipelinePositionDataTest) == 1924)
+    check(part2(pipelinePositionDataTest) == 12)
 
     // print results for 'real' data input:
     val pipelinePositionData: List<String> = readInput("day5/input-day5")
@@ -46,8 +51,15 @@ fun main() {
 }
 
 class Map(val mapData: Array<Array<Int>> = Array(1000) { Array(1000) { 0 } }) {
-    fun addNewPipeline(start: Pair<Int, Int>, end: Pair<Int, Int>) {
+    fun addNewPipeline(startParam: Pair<Int, Int>, endParam: Pair<Int, Int>, useDiagonals: Boolean = false) {
+        var start = startParam
+        var end = endParam
+        if (start.second > end.second) {
+            start = endParam
+            end = startParam
+        }
         when {
+            // horizontal
             start.first == end.first -> {
                 val fixedX = start.first
                 if (start.second <= end.second) {
@@ -56,6 +68,7 @@ class Map(val mapData: Array<Array<Int>> = Array(1000) { Array(1000) { 0 } }) {
                     for (y in end.second..start.second) mapData[y][fixedX] += 1
                 }
             }
+            // vertical
             start.second == end.second -> {
                 val fixedY = start.second
                 if (start.first <= end.first) {
@@ -64,8 +77,26 @@ class Map(val mapData: Array<Array<Int>> = Array(1000) { Array(1000) { 0 } }) {
                     for (x in end.first..start.first) mapData[fixedY][x] += 1
                 }
             }
+
+            // nach unten rechts
+            start.first < end.first && start.second < end.second && useDiagonals -> {
+                var x = start.first
+                for (row in start.second..end.second) {
+                    mapData[row][x] += 1
+                    x++
+                }
+            }
+            // nach unten links
+            start.first > end.first && start.second < end.second && useDiagonals -> {
+                var x = start.first
+                for (row in start.second..end.second) {
+                    mapData[row][x] += 1
+                    x--
+                }
+            }
             else -> {
-                // Do nothing on diagonal lines
+                // Do nothing on other lines
+                // println("hit other case: (${start.first}, ${start.second}) -> (${end.first},${end.second})")
             }
         }
     }
