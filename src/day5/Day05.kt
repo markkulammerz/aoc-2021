@@ -11,7 +11,7 @@ fun convertStringToPairs(input: String): Pair<Pair<Int, Int>, Pair<Int, Int>> {
     val start = Pair(startSplitted[0].toInt(), startSplitted[1].toInt())
     val end = Pair(endSplitted[0].toInt(), endSplitted[1].toInt())
 
-    return Pair(start, end);
+    return Pair(start, end)
 }
 
 fun part1(pipelinePositionData: List<String>): Int {
@@ -71,10 +71,7 @@ class Map(val mapData: Array<Array<Int>> = Array(1000) { Array(1000) { 0 } }) {
     }
 
     fun getDangerousAreasCount(dangerLimit: Int): Int {
-        var counter = 0
-        this.mapData.forEach { counter += it.count { it >= dangerLimit } }
-
-        return counter
+        return this.mapData.sumOf { line -> line.count { it >= dangerLimit } }
     }
 
     override fun toString(): String {
