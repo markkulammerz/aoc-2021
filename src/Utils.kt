@@ -25,11 +25,11 @@ fun Boolean.toNumberChar(): Char {
     return if (this) '1' else '0'
 }
 
-fun runFuncWithMeasurement(blocks: List<Pair<String, () -> Int>>) {
+fun runFuncWithMeasurement(blocks: List<Pair<String, () -> Number>>) {
     val times = mutableListOf<Pair<String, Long>>()
     for (block in blocks) {
         val label = block.first
-        var value: Int
+        var value: Number
         val time = measureNanoTime {
             value = block.second()
         }
