@@ -5,17 +5,36 @@ import runFuncWithMeasurement
 
 fun part1(input: List<String>): Int {
     val populationsStatistics = input[0].split(',').map { it.toInt() }
-    val population: ArrayDeque<Lanternfish> = ArrayDeque()
+    val population: ArrayDeque<LanternFish> = ArrayDeque()
 
     for(initialTimeToReproduce in populationsStatistics){
-        val newFisch = Lanternfish(initialTimeToReproduce)
-        population.add(newFisch)
+        val newFish = LanternFish(initialTimeToReproduce)
+        population.add(newFish)
     }
 
     for(day in 0..79){
         population.forEach {
             if(it.oneDayPassed() == Birth.BIRTH){
-                population.add(Lanternfish())
+                population.add(LanternFish())
+            }
+        }
+    }
+
+    return population.size
+}
+fun part1sk(input: List<String>): Int {
+    val populationsStatistics = input[0].split(',').map { it.toInt() }
+    val population: ArrayDeque<LanternFish> = ArrayDeque()
+
+    for(initialTimeToReproduce in populationsStatistics){
+        val newFish = LanternFish(initialTimeToReproduce)
+        population.add(newFish)
+    }
+
+    for(day in 0..79){
+        population.forEach {
+            it.oneDayPassedSk()?.let { fish ->
+                population.add(fish)
             }
         }
     }
@@ -31,28 +50,43 @@ fun main() {
     // test if implementation meets criteria from the description:
     val populationStatisticsTest: List<String> = readInput("day6/input-day6_test")
     check(part1(populationStatisticsTest) == 5934)
+    check(part1sk(populationStatisticsTest) == 5934)
     // check(part2(populationStatisticsTest) == 26984457539)
 
     // print results for 'real' data input:
-    val populationStatistics: List<String> = readInput("day6/input-day6")
+    val populationStatistics: List<String> = readInput("day6/input-day6-simon")
     runFuncWithMeasurement(
         listOf(
             Pair("step1", { part1(populationStatistics) }),
+            Pair("step1sk", { part1sk(populationStatistics) }),
             Pair("step2", { part2(populationStatistics) })
         )
     )
 }
 
-class Lanternfish(var timeToReproduce: Int = 9){
-    fun oneDayPassed(): Birth{
-        when{
+class LanternFish(var timeToReproduce: Int = 9){
+    fun oneDayPassed(): Birth {
+        return when{
             timeToReproduce >= 1 -> {
                 this.timeToReproduce -= 1
-                return Birth.NOT_READY
+                Birth.NOT_READY
             }
             else -> {
                 this.timeToReproduce = 6
-                return Birth.BIRTH
+                Birth.BIRTH
+            }
+        }
+    }
+
+    fun oneDayPassedSk(): LanternFish? {
+        return when{
+            timeToReproduce >= 1 -> {
+                this.timeToReproduce -= 1
+                null
+            }
+            else -> {
+                this.timeToReproduce = 6
+                LanternFish()
             }
         }
     }
