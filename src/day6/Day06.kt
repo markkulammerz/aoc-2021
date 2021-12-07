@@ -39,8 +39,8 @@ fun main() {
     )
 }
 
-class Population(val population: List<Int>) {
-    val fishies: LongArray = LongArray(9) { index -> population.filter { it == index }.size.toLong() }
+class Population(private val population: List<Int>) {
+    private val fishies: LongArray = LongArray(9) { index -> population.filter { it == index }.size.toLong() }
 
     fun nextDay() {
         val birthing = fishies[0]

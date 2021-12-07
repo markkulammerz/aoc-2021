@@ -21,6 +21,10 @@ fun List<Int>.toDecimalValue(): Int {
     return Integer.parseInt(this.joinToString(""), 2)
 }
 
+fun Int.triangularNumber(): Int {
+    return ((this.toLong() * (this.toLong() + 1)) / 2).toInt()
+}
+
 fun Boolean.toNumberChar(): Char {
     return if (this) '1' else '0'
 }
