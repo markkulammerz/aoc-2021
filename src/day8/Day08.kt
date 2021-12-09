@@ -1,5 +1,7 @@
 package day8
 
+import org.jetbrains.kotlinx.multik.api.mk
+import org.jetbrains.kotlinx.multik.api.ndarray
 import readInput
 import runFuncWithMeasurement
 

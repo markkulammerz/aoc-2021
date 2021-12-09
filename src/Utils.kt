@@ -21,6 +21,7 @@ fun List<Int>.toDecimalValue(): Int {
     return Integer.parseInt(this.joinToString(""), 2)
 }
 
+// https://de.wikipedia.org/wiki/Dreieckszahl (Fakultät mit +)
 fun Int.triangularNumber(): Int {
     return ((this.toLong() * (this.toLong() + 1)) / 2).toInt()
 }
