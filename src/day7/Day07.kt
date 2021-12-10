@@ -16,7 +16,7 @@ fun fuelConsumption(positions: List<Int>, constantConsumptionRate: Boolean): Int
                 val relocations = (alignPosition - position).absoluteValue
                 if (constantConsumptionRate) relocations else relocations.triangularNumber()
             }
-    } ?: 0
+    }
 }
 
 fun part1(positions: List<Int>): Int {
@@ -34,7 +34,7 @@ fun main() {
     check(part2(populationStatisticsTest) == 168)
 
     // print results for 'real' data input:
-    val populationStatistics: List<Int> = readInput("day7/input-day7")[0].split(",").map { it.toInt() }
+    val populationStatistics: List<Int> = readInput("day7/input-day7-simon")[0].split(",").map { it.toInt() }
     runFuncWithMeasurement(
         listOf(
             Pair("step1", { part1(populationStatistics) }),
